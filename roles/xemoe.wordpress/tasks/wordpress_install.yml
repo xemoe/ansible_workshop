@@ -1,0 +1,7 @@
+---
+- name: wordpress_install | Download wordpress and extract file
+  unarchive: 
+    src: "{{ wordpress_tar_url }}" 
+    dest: "{{ wordpress_default_root }}"
+    copy: no
+  when: not check_wordpress.stat.exists

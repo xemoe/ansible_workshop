@@ -1,0 +1,16 @@
+---
+- name: Hello world
+  shell: echo "hello world"
+  register: hello_debug
+
+- name: Debug hello world
+  debug: 
+    msg: "{{ hello_debug }}"
+
+- name: Test hello should have 'hello world'
+  assert: 
+    that: "'hello world' in hello_debug.stdout"
+
+- include: wordpress_pre.yml
+- include: wordpress_install.yml
+- include: wordpress_post.yml

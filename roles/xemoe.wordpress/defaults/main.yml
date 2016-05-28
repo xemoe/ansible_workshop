@@ -1,0 +1,33 @@
+---
+wordpress_dep_packages:
+    - apache2
+    - mysql-server
+    - php7.0
+    - php7.0-cli
+    - php7.0-mcrypt
+    - php7.0-curl
+    - php7.0-common
+    - php7.0-mysql
+    - libapache2-mod-php7.0
+    - python-mysqldb
+
+wordpress_mysql_root_user: root
+wordpress_mysql_root_password: mysqlpass123
+wordpress_mysql_questions:
+    - mysql-server/root_password
+    - mysql-server/root_password_again
+
+wordpress_db_name: "wordpress"
+wordpress_db_user: "wordpress"
+wordpress_db_password: "wordpress_password"
+wordpress_db_host: "localhost"
+
+wordpress_default_root: "/var/www/html"
+wordpress_default_index: "{{ wordpress_default_root }}/index.html"
+wordpress_root: "{{ wordpress_default_root }}/wordpress"
+wordpress_vhost_file: "/etc/apache2/sites-available/000-default.conf"
+wordpress_wp_file: "{{ wordpress_default_root }}/wordpress/wp-config.php"
+wordpress_wp_salt_file: "{{ wordpress_default_root }}/wordpress/wp-salt.php"
+
+wordpress_tar_url: "https://wordpress.org/latest.tar.gz"
+wordpress_salt_url: "https://api.wordpress.org/secret-key/1.1/salt/"

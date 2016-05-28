@@ -1,0 +1,6 @@
+---
+- hosts: wp-02
+  become: yes
+  roles:
+    - xemoe.wordpress
+

@@ -1,0 +1,54 @@
+---
+- name: wordpress_post | Change document root on Apache2
+  replace: 
+    dest: "{{ wordpress_vhost_file }}"
+    regexp: 'DocumentRoot .*' 
+    replace: "DocumentRoot {{ wordpress_root }}"
+  notify: "Restart Apache2"
+
+- name: wordpress_post | Create wordpress databases
+  mysql_db:
+    name: "{{ wordpress_db_name }}"
+    state: present
+    login_user: "{{ wordpress_mysql_root_user }}"
+    login_password: "{{ wordpress_mysql_root_password }}"
+
+- name: wordpress_post | Create wordpress db user_name
+  mysql_user:
+    name: "{{ wordpress_db_user }}"
+    password: "{{ wordpress_db_password }}"
+    priv: "{{ wordpress_db_name }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ wordpress_mysql_root_password }}"
+
+- name: wordpress_post | Check wp-salt.php file
+  stat: 
+    path: "{{ wordpress_wp_salt_file }}"
+  register: check_wordpress_salt
+
+- name: wordpress_post | Download wordpress salt
+  uri: 
+    url: "{{ wordpress_salt_url }}"
+    return_content: yes
+  register: wordpress_salt_register
+  when: not check_wordpress_salt.stat.exists
+
+- name: wordpress_post | Copy wp-salt.php template
+  template:
+    src: "var/www/html/wordpress/wp-salt.php.j2"
+    dest: "{{ wordpress_wp_salt_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: not check_wordpress_salt.stat.exists
+  vars:
+    wordpress_salt_contents: "{{ wordpress_salt_register.content }}"
+
+- name: wordpress_post | Copy wp-config.php template
+  template:
+    src: "var/www/html/wordpress/wp-config.php.j2"
+    dest: "{{ wordpress_wp_file }}"
+    owner: root
+    group: root
+    mode: 0644

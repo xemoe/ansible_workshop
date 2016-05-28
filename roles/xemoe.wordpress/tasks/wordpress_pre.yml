@@ -1,0 +1,26 @@
+---
+- name: wordpress_pre | Set MySQL root password before install
+  debconf:
+    name: mysql-server
+    question: "{{ item }}"
+    value: "{{ wordpress_mysql_root_password | quote }}"
+    vtype: password
+  with_items: "{{ wordpress_mysql_questions }}"
+
+- name: wordpress_pre | Install LAMP
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: "{{ wordpress_dep_packages }}"
+  notify: "Restart Apache2"
+
+- name: wordpress_pre | Delete "{{ wordpress_default_index }}"
+  file:
+    path: "{{ wordpress_default_index }}"
+    state: absent
+
+- name: wordpress_pre | Check wordpress is installed
+  stat: 
+    path: "{{ wordpress_root }}"
+  register: check_wordpress
