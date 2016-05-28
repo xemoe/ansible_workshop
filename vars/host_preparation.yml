@@ -1,0 +1,4 @@
+---
+host_preparation_ntp_server: 3.th.pool.ntp.org
+host_preparation_global_authorized_keys_path: "{{ playbook_dir }}/files/authorized_keys"
+host_preparation_host_name: ubuntu-xenial

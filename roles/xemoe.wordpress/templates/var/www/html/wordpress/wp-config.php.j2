@@ -12,7 +12,7 @@ define( 'DB_CHARSET',  'utf8mb4' );
 
 $table_prefix = 'wp_';
 
-require '/tmp/wp-salt.php';
+require '{{ wordpress_wp_salt_file }}';
 
 if ( !defined('ABSPATH') ) {
 	define('ABSPATH', dirname(__FILE__) . '/');

@@ -1,6 +1,8 @@
 ---
 - hosts: wp-02
   become: yes
+  vars_files:
+    - vars/host_preparation.yml
   roles:
     - xemoe.wordpress
 
